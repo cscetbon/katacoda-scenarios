@@ -1,6 +1,3 @@
-#docker pull consul:0.7.1
-#docker pull vault:0.6.4
-#docker pull postgres:9.6
 echo 'listener "tcp" {' >> vault.hcl
 echo '  address = "0.0.0.0:8200"' >> vault.hcl
 echo '  tls_disable = 1' >> vault.hcl
@@ -26,3 +23,6 @@ echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 
 echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 2:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
 echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 3:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
 chmod u+x start-vault.sh unseal-vault.sh
+#docker pull consul:0.7.1
+#docker pull vault:0.6.4
+#docker pull postgres:9.6
