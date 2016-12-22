@@ -1,38 +1,33 @@
 docker pull consul:0.7.1
 docker pull vault:0.6.4
 docker pull postgres:9.6
-cat > vault.hcl <<EOF
-listener "tcp" {
-  address = "0.0.0.0:8200"
-  tls_disable = 1
-}
 
-backend "consul" {
-  path = "vault/"
-  address = "consul:8500"
-  tls_skip_verify = 0
-}
+echo 'listener "tcp" {' >> vault.hcl
+echo '  address = "0.0.0.0:8200"' >> vault.hcl
+echo '  tls_disable = 1' >> vault.hcl
+echo '}' >> vault.hcl
+echo >> vault.hcl
+echo 'backend "consul" {' >> vault.hcl
+echo '  path = "vault/"' >> vault.hcl
+echo '  address = "consul:8500"' >> vault.hcl
+echo '  tls_skip_verify = 0' >> vault.hcl
+echo '}' >> vault.hcl
+echo >> vault.hcl
+echo 'disable_mlock = true' >> vault.hcl
+echo '' >> vault.hcl
+echo 'default_lease_ttl = "720h"' >> vault.hcl
+echo >> vault.hcl
+echo 'max_lease_ttl = "720h"' >> vault.hcl
 
-disable_mlock = true
+echo 'docker create -v /config --name config busybox; docker cp vault.hcl config:/config/' >> start-vault.sh
+echo 'docker run -d --name consul -p 8500:8500 consul:0.7.1 agent -dev -client=0.0.0.0' >> start-vault.sh
+echo 'docker run -d --name vault-dev --link consul:consul -p 8200:8200 --volumes-from config vault:0.6.4 server -config=/config/vault.hcl' >> start-vault.sh
 
-default_lease_ttl = "720h"
-
-max_lease_ttl = "720h"
-EOF
-
-cat > start-vault.sh<<EOF
-docker create -v /config --name config busybox; docker cp vault.hcl config:/config/
-docker run -d --name consul -p 8500:8500 consul:0.7.1 agent -dev -client=0.0.0.0
-docker run -d --name vault-dev --link consul:consul -p 8200:8200 --volumes-from config vault:0.6.4 server -config=/config/vault.hcl
-EOF
-
-cat > unseal-vault.sh<<EOF
-export VAULT_ADDR=http://127.0.0.1:8200
-docker exec -it vault-dev vault init -address=\${VAULT_ADDR} > keys.txt
-docker exec -it vault-dev vault unseal -address=\${VAULT_ADDR} \$(grep 'Key 1:' keys.txt | awk '{print \$NF}')
-docker exec -it vault-dev vault unseal -address=\${VAULT_ADDR} \$(grep 'Key 2:' keys.txt | awk '{print \$NF}')
-docker exec -it vault-dev vault unseal -address=\${VAULT_ADDR} \$(grep 'Key 3:' keys.txt | awk '{print \$NF}')
-EOF
+echo 'export VAULT_ADDR=http://127.0.0.1:8200' >> unseal-vault.sh
+echo 'docker exec -it vault-dev vault init -address=${VAULT_ADDR} > keys.txt' >> unseal-vault.sh
+echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 1:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
+echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 2:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
+echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 3:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
 
 chmod u+x start-vault.sh unseal-vault.sh
 
