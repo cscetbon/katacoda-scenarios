@@ -2,6 +2,9 @@ docker pull consul:0.7.1
 docker pull vault:0.6.4
 docker pull postgres:9.6
 
+echo 'FROM busybox' >> Dockerfile
+echo 'CMD ["date"]' >> Dockerfile
+
 cat > vault.hcl <<EOF
 listener "tcp" {
   address = "0.0.0.0:8200"
