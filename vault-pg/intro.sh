@@ -1,6 +1,6 @@
-docker pull consul:0.7.1
-docker pull vault:0.6.4
-docker pull postgres:9.6
+#docker pull consul:0.7.1
+#docker pull vault:0.6.4
+#docker pull postgres:9.6
 echo 'listener "tcp" {' >> vault.hcl
 echo '  address = "0.0.0.0:8200"' >> vault.hcl
 echo '  tls_disable = 1' >> vault.hcl
