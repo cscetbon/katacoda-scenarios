@@ -18,6 +18,7 @@ echo 'docker create -v /config --name config busybox; docker cp vault.hcl config
 echo 'docker run -d --name consul -p 8500:8500 consul:0.7.1 agent -dev -client=0.0.0.0' >> start-vault.sh
 echo 'docker run -d --name vault-dev --link consul:consul -p 8200:8200 --volumes-from config vault:0.6.4 server -config=/config/vault.hcl' >> start-vault.sh
 echo 'export VAULT_ADDR=http://127.0.0.1:8200' >> unseal-vault.sh
+echo 'alias vault=\'docker exec -it vault-dev vault "$@"\'' >> unseal-vault.sh
 echo 'docker exec -it vault-dev vault init -address=${VAULT_ADDR} > keys.txt' >> unseal-vault.sh
 echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 1:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
 echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 2:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
