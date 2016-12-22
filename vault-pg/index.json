@@ -1,12 +1,12 @@
 {
-    "title": "Launch Kubernetes Cluster",
-    "description": "Learn how to launch a Kubernetes cluster including DNS and Kube UI",
+    "title": "First steps with a Vault Cluster",
+    "description": "Learn how to interact with a Vault cluster using Consul as a storage backend and PG as an auth backend",
     "difficulty": "beginner",
     "time": "10-15 minutes",
     "details": {
         "steps": [
             {
-                "title": "Step 1 - Etcd",
+                "title": "Step 1 - Init",
                 "text": "step1.md"
             },
             {
