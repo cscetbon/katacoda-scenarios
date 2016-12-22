@@ -22,7 +22,3 @@ echo 'docker exec -it vault-dev vault init -address=${VAULT_ADDR} > keys.txt' >>
 echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 1:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
 echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 2:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
 echo 'docker exec -it vault-dev vault unseal -address=${VAULT_ADDR} $(grep 'Key 3:' keys.txt | awk "{print $NF}")' >> unseal-vault.sh
-chmod u+x start-vault.sh unseal-vault.sh
-#docker pull consul:0.7.1
-#docker pull vault:0.6.4
-#docker pull postgres:9.6
