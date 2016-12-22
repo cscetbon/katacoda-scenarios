@@ -47,11 +47,7 @@
             "text": "finish.md"
         }
     },
-    "files": [
-        "vault.hcl",
-	"start-vault.sh",
-	"unseal-vault.sh"
-    ],
+    "files": [],
     "environment": {
         "uilayout": "terminal",
         "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\r\nStart Vault using `launch.sh`\u001b[m\r\n"
