@@ -15,8 +15,10 @@ The final stage is to obtain the access token; this is outputted when we initial
 export VAULT_TOKEN=$(grep 'Initial Root Token:' keys.txt | awk '{print substr($NF, 1, length($NF)-1)}')
 `{{execute}}
 
-By logging in we can now start storing and persisting data 
+Now we need to authenticate using the root token we just grabbed
 `
+export VAULT_ADDR=http://127.0.0.1:8200
+alias vault='docker exec -it vault-dev vault "$@"'
 vault auth -address=${VAULT_ADDR} ${VAULT_TOKEN}
 `{{execute}}
 
